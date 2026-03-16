@@ -11,10 +11,29 @@ import { getCollection } from 'astro:content';
 const worlds = await getCollection('worlds');
 const avatars = await getCollection('avatars');
 
+// Compute an "effective date" for sorting that blends addedDate and lastUpdated.
+// A recently updated old world gets boosted toward the top, then gradually
+// decays back to its addedDate position over ~6 months.
+const DECAY_MS = 6 * 30 * 24 * 60 * 60 * 1000; // ~6 months
+const now = Date.now();
+
+function getEffectiveDate(world: typeof worlds[number]): number {
+  const added = new Date(world.data.addedDate).getTime();
+  const updated = world.data.lastUpdated
+    ? new Date(world.data.lastUpdated).getTime()
+    : added;
+
+  if (updated <= added) return added;
+
+  const timeSinceUpdate = now - updated;
+  const decay = Math.min(1, Math.max(0, timeSinceUpdate / DECAY_MS));
+  return updated + (added - updated) * decay;
+}
+
 const sortedWorlds = worlds.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
-  return b.data.addedDate.localeCompare(a.data.addedDate);
+  return getEffectiveDate(b) - getEffectiveDate(a);
 });
 
 const sortedAvatars = avatars.sort((a, b) => {
