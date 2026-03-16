@@ -691,14 +691,6 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-  /* Let the page scroll */
-  #desktop-shell {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: visible;
-  }
-
   .hack-layout {
     padding: 0.75rem 0.75rem 3.5rem 0.75rem;
     height: auto;
