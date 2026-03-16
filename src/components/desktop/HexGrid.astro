@@ -1,0 +1,130 @@
+---
+// Ambient hexagonal SVG background
+---
+
+<div class="hex-grid-container" aria-hidden="true">
+  <svg class="hex-grid-svg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs>
+      <symbol id="hex" viewBox="0 0 100 115.47">
+        <polygon
+          points="50 0, 100 28.87, 100 86.6, 50 115.47, 0 86.6, 0 28.87"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="0.5"
+        />
+      </symbol>
+
+      <pattern id="hex-pattern" x="0" y="0" width="120" height="207.85" patternUnits="userSpaceOnUse">
+        <use href="#hex" x="10" y="0" width="100" height="115.47" />
+        <use href="#hex" x="70" y="103.92" width="100" height="115.47" />
+      </pattern>
+    </defs>
+
+    <rect width="100%" height="100%" fill="url(#hex-pattern)" />
+  </svg>
+
+  <!-- Subtle glow accents -->
+  <div class="hex-accent hex-accent-1"></div>
+  <div class="hex-accent hex-accent-2"></div>
+
+  <!-- Decorative diagonal lines (ALTIMIT-style) -->
+  <svg class="hex-lines" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
+    <line x1="15%" y1="25%" x2="55%" y2="85%" class="deco-line deco-line-accent" />
+    <line x1="60%" y1="10%" x2="90%" y2="60%" class="deco-line deco-line-subtle" />
+  </svg>
+</div>
+
+<style>
+  .hex-grid-container {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hex-grid-svg {
+    position: absolute;
+    inset: -60px;
+    width: calc(100% + 120px);
+    height: calc(100% + 120px);
+    color: var(--color-hex-grid);
+    opacity: 1;
+    animation: hex-drift 45s linear infinite;
+  }
+
+  @keyframes hex-drift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-30px, -20px); }
+    50% { transform: translate(-10px, -40px); }
+    75% { transform: translate(-40px, -15px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .hex-lines {
+    position: absolute;
+    inset: 0;
+  }
+
+  .deco-line {
+    stroke-width: 1;
+    fill: none;
+    opacity: 0.15;
+  }
+
+  .deco-line-accent {
+    stroke: var(--color-accent);
+    opacity: 0.12;
+  }
+
+  .deco-line-subtle {
+    stroke: var(--color-text-dim);
+    opacity: 0.06;
+  }
+
+  .hex-accent {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(250px);
+    opacity: 0.7;
+    animation: hex-wander-1 30s ease-in-out infinite;
+  }
+
+  .hex-accent-1 {
+    width: 700px;
+    height: 700px;
+    top: -5%;
+    left: 5%;
+    background: var(--color-hex-accent-1);
+    animation-name: hex-wander-1;
+  }
+
+  .hex-accent-2 {
+    width: 600px;
+    height: 600px;
+    bottom: -5%;
+    right: 5%;
+    background: var(--color-hex-accent-2);
+    animation-name: hex-wander-2;
+    animation-duration: 35s;
+  }
+
+  @keyframes hex-wander-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, 30px) scale(1.05); }
+    66% { transform: translate(-20px, 50px) scale(0.95); }
+  }
+
+  @keyframes hex-wander-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-30px, -40px) scale(1.08); }
+    66% { transform: translate(25px, -20px) scale(0.97); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hex-accent,
+    .hex-grid-svg {
+      animation: none;
+    }
+  }
+</style>

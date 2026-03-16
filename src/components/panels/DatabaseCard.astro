@@ -1,0 +1,225 @@
+---
+import Card from '../Card.astro';
+
+interface Props {
+  worlds: any[];
+  avatars: any[];
+  worldTags: string[];
+  avatarSeries: string[];
+}
+
+const { worlds, avatars, worldTags, avatarSeries } = Astro.props;
+---
+
+<!-- Tab switcher -->
+<div class="flex items-center gap-2 mb-4" id="db-tabs">
+  <button class="db-tab db-tab-active" data-db-tab="worlds">Worlds</button>
+  <button class="db-tab" data-db-tab="avatars">Avatars</button>
+</div>
+
+<!-- Worlds content -->
+<div id="db-worlds" class="db-content">
+  <p class="text-text-muted mb-4 text-sm leading-relaxed">
+    .hack-inspired VRChat worlds. Root towns, dungeons, and fan creations.
+  </p>
+
+  <div class="flex flex-wrap gap-1.5 mb-4" id="tag-filters">
+    <button
+      class="tag-btn active px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 glass text-accent border border-accent/20"
+      data-tag="all"
+    >All</button>
+    {worldTags.map(tag => (
+      <button
+        class="tag-btn px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 glass text-text-dim hover:text-text-muted"
+        data-tag={tag}
+      >{tag}</button>
+    ))}
+  </div>
+
+  <div class="grid grid-cols-1 gap-3" id="worlds-grid">
+    {worlds.map(world => (
+      <div class="world-card" data-tags={JSON.stringify(world.data.tags)}>
+        <Card href={`https://vrchat.com/home/world/${world.data.worldId}`}>
+          <div class="flex gap-3">
+            {world.data.imageUrl && (
+              <div class="shrink-0 w-28 h-20 rounded-lg bg-panel-light overflow-hidden">
+                <img src={world.data.imageUrl} alt={world.data.name} class="w-full h-full object-cover" loading="lazy" />
+              </div>
+            )}
+            {!world.data.imageUrl && (
+              <div class="shrink-0 w-28 h-20 rounded-lg bg-panel-light flex items-center justify-center">
+                <svg class="w-8 h-8 text-text-dim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M2 12h20"></path>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+            )}
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-2 mb-1">
+                <h3 class="font-display text-sm font-semibold text-text leading-tight">{world.data.name}</h3>
+                {world.data.featured && (
+                  <span class="shrink-0 text-[11px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded font-mono">
+                    Featured
+                  </span>
+                )}
+              </div>
+              <p class="text-xs text-text-dim mb-1.5 font-mono">by {world.data.author}</p>
+              <p class="text-sm text-text-muted leading-relaxed line-clamp-2">{world.data.description}</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mt-2.5 pt-2.5 border-t border-panel-border-subtle">
+            {world.data.tags.map((tag: string) => (
+              <span class="text-[11px] text-text-dim bg-panel-light px-2 py-0.5 rounded-md">{tag}</span>
+            ))}
+          </div>
+        </Card>
+      </div>
+    ))}
+  </div>
+
+  {worlds.length === 0 && (
+    <div class="text-center py-8">
+      <p class="text-text-dim font-mono text-sm">No worlds added yet.</p>
+    </div>
+  )}
+</div>
+
+<!-- Avatars content -->
+<div id="db-avatars" class="db-content" style="display: none;">
+  <p class="text-text-muted mb-4 text-sm leading-relaxed">
+    .hack character avatars found in VRChat. From the original games to G.U. and beyond.
+  </p>
+
+  <div class="flex flex-wrap gap-1.5 mb-4" id="series-filters">
+    <button
+      class="series-btn active px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 glass text-accent border border-accent/20"
+      data-series="all"
+    >All Series</button>
+    {avatarSeries.map(s => (
+      <button
+        class="series-btn px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 glass text-text-dim hover:text-text-muted"
+        data-series={s}
+      >{s}</button>
+    ))}
+  </div>
+
+  <div class="grid grid-cols-1 gap-3" id="avatars-grid">
+    {avatars.map(avatar => (
+      <div class="avatar-card" data-series={avatar.data.series}>
+        <Card>
+          <div class="flex gap-3">
+            {avatar.data.imageUrl && (
+              <div class="shrink-0 w-20 h-20 rounded-lg bg-panel-light overflow-hidden">
+                <img src={avatar.data.imageUrl} alt={avatar.data.name} class="w-full h-full object-cover" loading="lazy" />
+              </div>
+            )}
+            {!avatar.data.imageUrl && (
+              <div class="shrink-0 w-20 h-20 rounded-lg bg-panel-light flex items-center justify-center">
+                <svg class="w-8 h-8 text-text-dim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            )}
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-2 mb-1">
+                <h3 class="font-display text-sm font-semibold text-text">{avatar.data.name}</h3>
+                {avatar.data.featured && (
+                  <span class="shrink-0 text-[11px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded font-mono">
+                    Featured
+                  </span>
+                )}
+              </div>
+              <p class="text-xs text-accent-dim font-medium mb-0.5">{avatar.data.series}</p>
+              <p class="text-xs text-text-dim mb-1.5 font-mono">by {avatar.data.creatorName}</p>
+              <p class="text-sm text-text-muted leading-relaxed line-clamp-2">{avatar.data.description}</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mt-2.5 pt-2.5 border-t border-panel-border-subtle">
+            {avatar.data.tags.map((tag: string) => (
+              <span class="text-[11px] text-text-dim bg-panel-light px-2 py-0.5 rounded-md">{tag}</span>
+            ))}
+          </div>
+        </Card>
+      </div>
+    ))}
+  </div>
+
+  {avatars.length === 0 && (
+    <div class="text-center py-8">
+      <p class="text-text-dim font-mono text-sm">No avatars added yet.</p>
+    </div>
+  )}
+</div>
+
+<script is:inline>
+  (function () {
+    // Tab switching
+    var tabs = document.querySelectorAll('[data-db-tab]');
+    var worldsContent = document.getElementById('db-worlds');
+    var avatarsContent = document.getElementById('db-avatars');
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) {
+          t.classList.remove('db-tab-active');
+        });
+        tab.classList.add('db-tab-active');
+        var target = tab.getAttribute('data-db-tab');
+        if (target === 'worlds') {
+          worldsContent.style.display = '';
+          avatarsContent.style.display = 'none';
+        } else {
+          worldsContent.style.display = 'none';
+          avatarsContent.style.display = '';
+        }
+      });
+    });
+
+    // World tag filtering
+    var tagBtns = document.querySelectorAll('.tag-btn');
+    var worldCards = document.querySelectorAll('.world-card');
+    tagBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tagBtns.forEach(function (b) {
+          b.classList.remove('active', 'text-accent', 'border', 'border-accent/20');
+          b.classList.add('text-text-dim');
+        });
+        btn.classList.add('active', 'text-accent', 'border', 'border-accent/20');
+        btn.classList.remove('text-text-dim');
+        var tag = btn.getAttribute('data-tag');
+        worldCards.forEach(function (card) {
+          if (tag === 'all') {
+            card.style.display = '';
+          } else {
+            var tags = JSON.parse(card.getAttribute('data-tags') || '[]');
+            card.style.display = tags.includes(tag) ? '' : 'none';
+          }
+        });
+      });
+    });
+
+    // Avatar series filtering
+    var seriesBtns = document.querySelectorAll('.series-btn');
+    var avatarCards = document.querySelectorAll('.avatar-card');
+    seriesBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        seriesBtns.forEach(function (b) {
+          b.classList.remove('active', 'text-accent', 'border', 'border-accent/20');
+          b.classList.add('text-text-dim');
+        });
+        btn.classList.add('active', 'text-accent', 'border', 'border-accent/20');
+        btn.classList.remove('text-text-dim');
+        var series = btn.getAttribute('data-series');
+        avatarCards.forEach(function (card) {
+          if (series === 'all') {
+            card.style.display = '';
+          } else {
+            card.style.display = card.getAttribute('data-series') === series ? '' : 'none';
+          }
+        });
+      });
+    });
+  })();
+</script>

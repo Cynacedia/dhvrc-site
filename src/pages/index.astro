@@ -1,0 +1,180 @@
+---
+import DesktopLayout from '../layouts/DesktopLayout.astro';
+import DesktopShell from '../components/desktop/DesktopShell.astro';
+import GlossyCard from '../components/desktop/GlossyCard.astro';
+import SlashCard from '../components/desktop/SlashCard.astro';
+import InfoCard from '../components/panels/InfoCard.astro';
+import DatabaseCard from '../components/panels/DatabaseCard.astro';
+import CommunityPanel from '../components/panels/CommunityPanel.astro';
+import { getCollection } from 'astro:content';
+
+const worlds = await getCollection('worlds');
+const avatars = await getCollection('avatars');
+
+const sortedWorlds = worlds.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return b.data.addedDate.localeCompare(a.data.addedDate);
+});
+
+const sortedAvatars = avatars.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return a.data.name.localeCompare(b.data.name);
+});
+
+const worldTags = [...new Set(worlds.flatMap(w => w.data.tags))].sort();
+const avatarSeries = [...new Set(avatars.map(a => a.data.series))].sort();
+---
+
+<DesktopLayout>
+  <DesktopShell>
+    <!-- The "hack" — main expanded card -->
+    <Fragment slot="main">
+      <GlossyCard id="main-card" title=".hack//VRC" accent="accent">
+        <Fragment slot="nav">
+          <button class="subview-btn subview-active" data-subview="view-group">Group</button>
+          <button class="subview-btn" data-subview="view-whatis">.hack?</button>
+          <button class="subview-btn" data-subview="view-official">Official</button>
+          <button class="subview-btn" data-subview="view-community">Community</button>
+        </Fragment>
+        <InfoCard />
+      </GlossyCard>
+    </Fragment>
+
+    <!-- The "//" — slash cards -->
+    <Fragment slot="slashes">
+      <SlashCard id="database-slash" title="Database" accent="purple">
+        <DatabaseCard worlds={sortedWorlds} avatars={sortedAvatars} worldTags={worldTags} avatarSeries={avatarSeries} />
+      </SlashCard>
+
+      <SlashCard id="community-slash" title="Community" accent="teal">
+        <CommunityPanel />
+      </SlashCard>
+    </Fragment>
+  </DesktopShell>
+</DesktopLayout>
+
+<!-- Controller: sub-views + card swapping -->
+<script is:inline>
+  (function () {
+    // ---- Sub-view switching ----
+    var subviewBtns = document.querySelectorAll('[data-subview]');
+    var subviews = document.querySelectorAll('.subview');
+
+    subviewBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('data-subview');
+        subviewBtns.forEach(function (b) { b.classList.remove('subview-active'); });
+        btn.classList.add('subview-active');
+        subviews.forEach(function (sv) {
+          sv.style.display = sv.id === target ? '' : 'none';
+        });
+
+      });
+    });
+
+    // ---- Card expansion: expanded card always goes to order:1 (left) ----
+    var mainCard = document.querySelector('[data-card-role="main"]');
+    var mainTitle = mainCard.querySelector('.main-card-titlebar h2');
+    var mainTitleOriginal = mainTitle ? mainTitle.textContent : '';
+    var slashCards = document.querySelectorAll('[data-card-role="slash"]');
+    var allCards = [mainCard].concat(Array.from(slashCards));
+    var moduleBtns = document.querySelectorAll('[data-module]');
+    var activeMainId = 'main-card';
+
+    function updateModuleBar() {
+      moduleBtns.forEach(function (btn) {
+        var moduleId = btn.getAttribute('data-module');
+        btn.classList.toggle('module-active', moduleId === activeMainId);
+      });
+    }
+
+    function resetOrder() {
+      // Default: main is order 1, slashes are order 2
+      mainCard.style.order = '1';
+      slashCards.forEach(function (s) {
+        s.style.order = '2';
+      });
+    }
+
+    function expandSlash(slashId) {
+      var slash = document.getElementById(slashId);
+      if (!slash || slash.classList.contains('slash-expanded')) return;
+
+      // Collapse any expanded slash first
+      slashCards.forEach(function (s) {
+        s.classList.remove('slash-expanded');
+        s.style.order = '2';
+      });
+
+      // Collapse main card and move it right
+      mainCard.classList.add('main-collapsed');
+      mainCard.style.order = '2';
+      if (mainTitle) mainTitle.textContent = 'Home';
+
+      // Expand this slash and move it left
+      slash.classList.add('slash-expanded');
+      slash.style.order = '1';
+
+      activeMainId = slashId;
+      updateModuleBar();
+    }
+
+    function restoreMain() {
+      mainCard.classList.remove('main-collapsed');
+      if (mainTitle) mainTitle.textContent = mainTitleOriginal;
+      slashCards.forEach(function (s) {
+        s.classList.remove('slash-expanded');
+      });
+      resetOrder();
+      activeMainId = 'main-card';
+      updateModuleBar();
+    }
+
+    // Click slash cards to expand
+    slashCards.forEach(function (slash) {
+      slash.addEventListener('click', function () {
+        if (slash.classList.contains('slash-expanded')) return;
+        expandSlash(slash.id);
+      });
+    });
+
+    // Click collapsed main card to restore
+    mainCard.addEventListener('click', function () {
+      if (mainCard.classList.contains('main-collapsed')) {
+        restoreMain();
+      }
+    });
+
+    // Module bar buttons
+    moduleBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var moduleId = btn.getAttribute('data-module');
+        if (moduleId === 'main-card') {
+          restoreMain();
+        } else {
+          expandSlash(moduleId);
+        }
+      });
+    });
+
+    // Hash-based deep linking
+    function checkHash() {
+      var hash = window.location.hash.replace('#', '');
+      var mapping = { database: 'database-slash', community: 'community-slash', home: 'main-card' };
+      if (hash && mapping[hash]) {
+        if (mapping[hash] === 'main-card') {
+          restoreMain();
+        } else {
+          expandSlash(mapping[hash]);
+        }
+      }
+    }
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+
+    resetOrder();
+    updateModuleBar();
+  })();
+</script>

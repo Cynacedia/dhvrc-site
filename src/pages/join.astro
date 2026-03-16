@@ -1,0 +1,374 @@
+---
+// VRChat Launch Redirect Page
+// Used by the ALGOS Discord bot to open worlds/instances directly in VRChat
+// URL formats: /join/?i={worldId}:{instanceId}  or  /join/?w={worldId}
+// This page is entirely client-side — no data is logged or transmitted
+import '../styles/global.css';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Joining — Dot Hackers VRC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <style>
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .join-container {
+        position: relative;
+        z-index: 1;
+        max-width: 420px;
+        width: 100%;
+        margin: 1rem;
+        padding: 2.5rem;
+        border-radius: 1.25rem;
+        background: var(--color-panel);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--color-panel-border);
+        text-align: center;
+      }
+
+      .join-brand {
+        font-family: var(--font-display);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-accent);
+        margin-bottom: 2rem;
+      }
+
+      .spinner {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 1.5rem;
+        border: 3px solid var(--color-panel-border-subtle);
+        border-top-color: var(--color-accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .status-text {
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+      }
+
+      .sub-text {
+        font-size: 0.875rem;
+        color: var(--color-text-dim);
+        line-height: 1.5;
+      }
+
+      .state { display: none; }
+      .state.active { display: block; }
+
+      .fallback-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.75rem;
+        font-family: var(--font-body);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+      }
+
+      .btn-primary {
+        background: var(--color-accent);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--color-accent-bright);
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: var(--color-glass);
+        color: var(--color-text);
+        border: 1px solid var(--color-glass-border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--color-glass-hover);
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--color-accent);
+        padding: 0.5rem;
+      }
+
+      .btn-ghost:hover {
+        color: var(--color-accent-bright);
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+
+      .copied-toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: var(--color-panel);
+        border: 1px solid var(--color-accent);
+        color: var(--color-accent);
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .copied-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .error-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 1.5rem;
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.1);
+        border: 2px solid rgba(239, 68, 68, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ef4444;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .divider {
+        width: 100%;
+        height: 1px;
+        background: var(--color-panel-border-subtle);
+        margin: 1rem 0;
+      }
+
+      .home-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        color: var(--color-text-dim);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .home-link:hover {
+        color: var(--color-text-muted);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .spinner { animation: none; }
+      }
+    </style>
+  </head>
+  <body class="bg-bg text-text font-body transition-colors duration-300">
+
+    <div class="join-container">
+      <div class="join-brand">.hack//VRC</div>
+
+      <!-- Loading State -->
+      <div id="state-loading" class="state active">
+        <div class="spinner"></div>
+        <p class="status-text">Connecting to VRChat...</p>
+        <p class="sub-text">Preparing to launch</p>
+      </div>
+
+      <!-- Redirecting State -->
+      <div id="state-redirecting" class="state">
+        <div class="spinner"></div>
+        <p class="status-text">Opening VRChat...</p>
+        <p class="sub-text">If VRChat doesn't open automatically, use the options below</p>
+      </div>
+
+      <!-- Fallback State -->
+      <div id="state-fallback" class="state">
+        <p class="status-text">VRChat didn't open?</p>
+        <p class="sub-text">Try one of these options</p>
+
+        <div class="fallback-actions">
+          <button id="btn-retry" class="btn btn-primary">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            Try Again
+          </button>
+
+          <a id="btn-web" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Open via VRChat Website
+          </a>
+
+          <div class="divider"></div>
+
+          <button id="btn-copy" class="btn btn-ghost">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy Launch Link
+          </button>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="state-error" class="state">
+        <div class="error-icon">!</div>
+        <p class="status-text">Something went wrong</p>
+        <p id="error-message" class="sub-text">No instance specified.</p>
+        <div class="fallback-actions">
+          <a href="/" class="btn btn-secondary">Go to Homepage</a>
+        </div>
+      </div>
+
+      <a href="/" class="home-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        dothackvr.chat
+      </a>
+    </div>
+
+    <div id="copied-toast" class="copied-toast">Link copied to clipboard</div>
+
+    <script is:inline>
+      (function () {
+        const states = {
+          loading: document.getElementById('state-loading'),
+          redirecting: document.getElementById('state-redirecting'),
+          fallback: document.getElementById('state-fallback'),
+          error: document.getElementById('state-error'),
+        };
+
+        function showState(name) {
+          Object.values(states).forEach(el => el.classList.remove('active'));
+          states[name].classList.add('active');
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const instanceParam = params.get('i');
+        const worldParam = params.get('w');
+
+        if (!instanceParam && !worldParam) {
+          showState('error');
+          return;
+        }
+
+        var launchUri, webUrl;
+
+        if (instanceParam) {
+          const instanceLocation = decodeURIComponent(instanceParam);
+
+          if (!instanceLocation.startsWith('wrld_') || !instanceLocation.includes(':')) {
+            document.getElementById('error-message').textContent = 'Invalid instance link format.';
+            showState('error');
+            return;
+          }
+
+          launchUri = 'vrchat://launch?ref=dothackvr.chat&id=' + encodeURIComponent(instanceLocation) + '&attach=1';
+
+          const colonIndex = instanceLocation.indexOf(':');
+          const worldId = instanceLocation.substring(0, colonIndex);
+          const instanceId = instanceLocation.substring(colonIndex + 1);
+          webUrl = 'https://vrchat.com/home/launch?worldId=' + encodeURIComponent(worldId) + '&instanceId=' + encodeURIComponent(instanceId);
+        } else {
+          const worldId = decodeURIComponent(worldParam);
+
+          if (!worldId.startsWith('wrld_')) {
+            document.getElementById('error-message').textContent = 'Invalid world ID format.';
+            showState('error');
+            return;
+          }
+
+          // World-only joins have no instance — redirect to VRChat website
+          // which can open the world details in a running client
+          launchUri = null;
+          webUrl = 'https://vrchat.com/home/launch?worldId=' + encodeURIComponent(worldId);
+        }
+
+        document.getElementById('btn-web').href = webUrl;
+
+        if (launchUri) {
+          document.getElementById('btn-retry').addEventListener('click', function () {
+            window.location.href = launchUri;
+          });
+
+          document.getElementById('btn-copy').addEventListener('click', function () {
+            navigator.clipboard.writeText(launchUri).then(function () {
+              var toast = document.getElementById('copied-toast');
+              toast.classList.add('show');
+              setTimeout(function () { toast.classList.remove('show'); }, 2000);
+            });
+          });
+
+          showState('redirecting');
+          window.location.href = launchUri;
+        } else {
+          // For world-only, go straight to VRChat website
+          showState('redirecting');
+          window.location.href = webUrl;
+        }
+
+        setTimeout(function () {
+          showState('fallback');
+        }, 3000);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  accent: 'purple' | 'teal';
+}
+
+const { id, title, accent } = Astro.props;
+---
+
+<div id={id} class="slash-card" data-accent={accent} data-card-role="slash">
+  <div class="slash-card-inner">
+    <span class="slash-title">{title}</span>
+    <div class="slash-content">
+      <slot />
+    </div>
+  </div>
+</div>
