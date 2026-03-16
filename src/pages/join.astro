@@ -321,7 +321,7 @@ import '../styles/global.css';
             return;
           }
 
-          launchUri = 'vrchat://launch?ref=dothackvr.chat&id=' + encodeURIComponent(instanceLocation) + '&attach=1';
+          launchUri = 'vrchat://launch?ref=dothackvr.chat&id=' + instanceLocation + '&attach=1';
 
           const colonIndex = instanceLocation.indexOf(':');
           const worldId = instanceLocation.substring(0, colonIndex);
