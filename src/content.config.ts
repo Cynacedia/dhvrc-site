@@ -12,7 +12,10 @@ const worlds = defineCollection({
     tags: z.array(z.string()),
     featured: z.boolean().default(false),
     addedDate: z.string(),
-    lastUpdated: z.string().optional(),
+    publishedAt: z.string().optional(),
+    updatedAt: z.string().optional(),
+    forumChannelId: z.string().optional(),
+    forumThreadId: z.string().optional(),
   }),
 });
 
