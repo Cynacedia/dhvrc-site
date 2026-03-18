@@ -719,6 +719,8 @@
     min-height: 60dvh;
     order: 1 !important;
     border-radius: 12px;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Collapsed slash cards → tappable strips */
@@ -757,6 +759,8 @@
     height: auto;
     order: 1 !important;
     border-radius: 12px;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
   }
 
   .slash-card.slash-expanded .slash-card-inner {
