@@ -31,6 +31,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   body {
@@ -689,74 +694,8 @@
   }
 }
 
-/* Mobile — brighten light mode for readability
-   Uses !important + hardcoded values to guarantee override on all mobile browsers */
+/* Mobile layout */
 @media (max-width: 768px) {
-  html:not(.dark) {
-    --color-bg: #e8e8ec !important;
-    --color-bg-subtle: #dddde2 !important;
-    --color-panel: #f2f2f4 !important;
-    --color-panel-solid: #f4f4f6 !important;
-    --color-panel-light: #ebebee !important;
-    --color-panel-border: rgba(196, 60, 60, 0.15) !important;
-    --color-panel-border-subtle: rgba(0, 0, 0, 0.08) !important;
-    --color-text: #1a1a1e !important;
-    --color-text-muted: #50505a !important;
-    --color-text-dim: #70707a !important;
-    --color-glass: rgba(255, 255, 255, 0.85) !important;
-    --color-glass-border: rgba(0, 0, 0, 0.08) !important;
-    --color-glass-hover: rgba(255, 255, 255, 0.95) !important;
-    --color-slash-a: #dddde2 !important;
-    --color-slash-b: #d6d6dc !important;
-    --color-hex-grid: rgba(0, 0, 0, 0.08) !important;
-    --color-hex-accent-1: rgba(196, 60, 60, 0.04) !important;
-    --color-hex-accent-2: rgba(0, 0, 0, 0.02) !important;
-  }
-
-  /* Opaque panels on mobile light — no backdrop-filter muddiness */
-  html:not(.dark) .main-card-inner {
-    background: #f2f2f4 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  html:not(.dark) .slash-card[data-accent="purple"] .slash-card-inner {
-    background: #dddde2 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  html:not(.dark) .slash-card[data-accent="teal"] .slash-card-inner {
-    background: #d6d6dc !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  html:not(.dark) .slash-card.slash-expanded .slash-card-inner {
-    background: #f2f2f4 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  html:not(.dark) .main-card.main-collapsed .main-card-inner {
-    background: #dddde2 !important;
-  }
-
-  html:not(.dark) .module-bar {
-    background: rgba(232, 232, 236, 0.92) !important;
-  }
-
-  html:not(.dark) .main-card-inner::before {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 0, 0, 0.06) 30%,
-      rgba(0, 0, 0, 0.08) 50%,
-      rgba(0, 0, 0, 0.06) 70%,
-      transparent 100%
-    ) !important;
-  }
-
   .hack-layout {
     padding: 0.75rem 0.75rem 3.5rem 0.75rem;
     height: auto;
