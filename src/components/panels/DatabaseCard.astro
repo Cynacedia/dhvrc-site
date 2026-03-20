@@ -80,7 +80,7 @@ const { worlds, avatars, worldTags, avatarSeries } = Astro.props;
                   <path d="M7 17L17 7M17 7H7M17 7v10"/>
                 </svg>
               </a>
-              <a href={`https://vrchat.com/home/launch?worldId=${world.data.worldId}`} target="_blank" rel="noopener noreferrer" class="world-card-btn world-card-btn-launch" title="Launch in VRChat">
+              <a class="world-card-btn world-card-btn-launch" data-launch-world={world.data.worldId} title="Launch in VRChat">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                   <polygon points="5 3 19 12 5 21 5 3"/>
                 </svg>
@@ -188,6 +188,19 @@ const { worlds, avatars, worldTags, avatarSeries } = Astro.props;
           worldsContent.style.display = 'none';
           avatarsContent.style.display = '';
         }
+      });
+    });
+
+    // World card launch buttons
+    var launchBtns = document.querySelectorAll('[data-launch-world]');
+    launchBtns.forEach(function (btn) {
+      btn.style.cursor = 'pointer';
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var worldId = btn.getAttribute('data-launch-world');
+        var instanceId = Math.floor(10000 + Math.random() * 90000) + '~region(us)';
+        var location = encodeURIComponent(worldId + ':' + instanceId);
+        window.open('/join/?i=' + location, '_blank');
       });
     });
 
