@@ -200,6 +200,8 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-panel-border);
+    transition: transform 0.3s ease;
+    will-change: transform;
   }
 
   /* Top gloss shine line */
@@ -322,6 +324,8 @@
     transition: flex 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                 clip-path 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                 border-radius 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.2s ease,
+                filter 0.2s ease,
                 order 0s linear 0s;
     overflow: hidden;
     order: 2;
@@ -369,7 +373,7 @@
 
   .slash-card:not(.slash-expanded):hover {
     filter: brightness(1.05);
-    flex-basis: 100px;
+    transform: scaleX(1.08);
   }
 
   .slash-card:not(.slash-expanded):hover .slash-title {
@@ -498,8 +502,8 @@
   }
 
   .main-card.main-collapsed:hover {
-    flex: 0 0 100px;
     filter: brightness(1.05);
+    transform: scaleX(1.08);
   }
 
   /* ==========================================
@@ -624,6 +628,205 @@
     height: 28px;
   }
 
+  /* ==========================================
+     .hack? Timeline
+     ========================================== */
+
+  .timeline-container {
+    position: relative;
+  }
+
+  .timeline-track {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: none;
+    position: relative;
+  }
+
+  .timeline-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Connecting line behind nodes */
+  .timeline-track::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-panel-border-subtle);
+    pointer-events: none;
+  }
+
+  .timeline-node {
+    position: relative;
+    flex-shrink: 0;
+    padding: 0.3rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    background: var(--color-glass);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-dim);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .timeline-node:hover {
+    color: var(--color-text-muted);
+    background: var(--color-glass-hover);
+  }
+
+  .timeline-node.timeline-active {
+    color: var(--color-accent);
+    border-color: rgba(196, 60, 60, 0.25);
+    background: rgba(196, 60, 60, 0.08);
+  }
+
+  .timeline-details {
+    position: relative;
+    min-height: 0;
+  }
+
+  .timeline-detail {
+    display: none;
+    padding: 0.75rem;
+    background: var(--color-glass);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 8px;
+    animation: timeline-reveal 0.25s ease-out;
+  }
+
+  .timeline-detail.timeline-detail-active {
+    display: block;
+  }
+
+  @keyframes timeline-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .timeline-type {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .timeline-type-detail {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.575rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text-dim);
+    margin-top: 0.125rem;
+  }
+
+  .timeline-detail-layout {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .timeline-gallery {
+    flex-shrink: 0;
+    width: 100px;
+    height: 140px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    background: var(--color-panel-light);
+    border: 1px solid var(--color-panel-border-subtle);
+  }
+
+  .timeline-gallery img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .timeline-gallery img.gallery-active {
+    opacity: 1;
+  }
+
+  .timeline-gallery-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+  }
+
+  /* Gallery dots */
+  .timeline-gallery-dots {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    z-index: 2;
+  }
+
+  .timeline-gallery-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: background 0.3s;
+  }
+
+  .timeline-gallery-dot.gallery-dot-active {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .timeline-detail-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .timeline-related {
+    margin-top: 0.75rem;
+    padding-top: 0.625rem;
+    border-top: 1px solid var(--color-panel-border-subtle);
+  }
+
+  .timeline-related-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-related-items {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
   /* Database tabs */
   .db-tab {
     padding: 0.375rem 0.75rem;
@@ -647,6 +850,35 @@
     color: var(--color-accent);
     border-color: rgba(196, 60, 60, 0.2);
     background: rgba(196, 60, 60, 0.06);
+  }
+
+  /* World card buttons */
+  .world-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--color-panel-light);
+    color: var(--color-text-dim);
+    border: 1px solid var(--color-glass-border);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .world-card-btn:hover {
+    color: var(--color-text);
+    background: var(--color-glass-hover);
+  }
+
+  .world-card-btn-launch:hover {
+    color: var(--color-accent);
+    border-color: rgba(196, 60, 60, 0.2);
+  }
+
+  .world-card-desc {
+    transition: all 0.2s ease;
   }
 }
 
@@ -691,6 +923,10 @@
   .main-card,
   .slash-card {
     transition: none;
+  }
+
+  .timeline-detail {
+    animation: none;
   }
 }
 
@@ -801,6 +1037,16 @@
 
   .main-card.main-collapsed:hover .main-card-titlebar h2 {
     color: var(--color-text) !important;
+  }
+
+  /* Timeline gallery stacks on mobile */
+  .timeline-detail-layout {
+    flex-direction: column;
+  }
+
+  .timeline-gallery {
+    width: 100%;
+    height: 120px;
   }
 
   /* Module bar — bigger touch targets */

@@ -39,8 +39,8 @@ const { worlds, avatars, worldTags, avatarSeries } = Astro.props;
   <div class="grid grid-cols-1 gap-3" id="worlds-grid">
     {worlds.map(world => (
       <div class="world-card" data-tags={JSON.stringify(world.data.tags)}>
-        <Card href={`https://vrchat.com/home/world/${world.data.worldId}`}>
-          <div class="flex gap-3">
+        <Card>
+          <div class="world-card-header flex gap-3">
             {world.data.imageUrl && (
               <div class="shrink-0 w-28 h-20 rounded-lg bg-panel-light overflow-hidden">
                 <img src={world.data.imageUrl} alt={world.data.name} class="w-full h-full object-cover" loading="lazy" />
@@ -65,13 +65,27 @@ const { worlds, avatars, worldTags, avatarSeries } = Astro.props;
                 )}
               </div>
               <p class="text-xs text-text-dim mb-1.5 font-mono">by {world.data.author}</p>
-              <p class="text-sm text-text-muted leading-relaxed line-clamp-2">{world.data.description}</p>
+              <p class="world-card-desc text-sm text-text-muted leading-relaxed line-clamp-2">{world.data.description}</p>
             </div>
           </div>
-          <div class="flex flex-wrap gap-1.5 mt-2.5 pt-2.5 border-t border-panel-border-subtle">
-            {world.data.tags.map((tag: string) => (
-              <span class="text-[11px] text-text-dim bg-panel-light px-2 py-0.5 rounded-md">{tag}</span>
-            ))}
+          <div class="flex items-center gap-1.5 mt-2.5 pt-2.5 border-t border-panel-border-subtle">
+            <div class="flex flex-wrap gap-1.5 flex-1 min-w-0">
+              {world.data.tags.map((tag: string) => (
+                <span class="text-[11px] text-text-dim bg-panel-light px-2 py-0.5 rounded-md">{tag}</span>
+              ))}
+            </div>
+            <div class="flex gap-1.5 shrink-0">
+              <a href={`https://vrchat.com/home/world/${world.data.worldId}`} target="_blank" rel="noopener noreferrer" class="world-card-btn" title="View on VRChat">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                </svg>
+              </a>
+              <a href={`/join/?w=${world.data.worldId}`} target="_blank" rel="noopener noreferrer" class="world-card-btn world-card-btn-launch" title="Launch in VRChat">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </a>
+            </div>
           </div>
         </Card>
       </div>
@@ -173,6 +187,25 @@ const { worlds, avatars, worldTags, avatarSeries } = Astro.props;
         } else {
           worldsContent.style.display = 'none';
           avatarsContent.style.display = '';
+        }
+      });
+    });
+
+    // World card expand/collapse
+    var worldCardEls = document.querySelectorAll('.world-card');
+    worldCardEls.forEach(function (card) {
+      var header = card.querySelector('.world-card-header');
+      var desc = card.querySelector('.world-card-desc');
+      if (!header || !desc) return;
+      header.style.cursor = 'pointer';
+      header.addEventListener('click', function () {
+        var isExpanded = !desc.classList.contains('line-clamp-2');
+        if (isExpanded) {
+          desc.classList.add('line-clamp-2');
+          card.classList.remove('world-card-expanded');
+        } else {
+          desc.classList.remove('line-clamp-2');
+          card.classList.add('world-card-expanded');
         }
       });
     });

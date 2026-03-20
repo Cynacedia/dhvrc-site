@@ -19,61 +19,11 @@ import Card from '../Card.astro';
     <p class="text-sm text-text-dim font-mono tracking-wider uppercase">VRChat Community</p>
   </div>
 
-  <p class="text-base text-text-muted text-center leading-relaxed max-w-lg mx-auto mb-6">
-    We're a VRChat community built around a shared love for the .hack franchise. We maintain a
-    database of .hack-themed worlds, organize group explorations, and serve as a hub for fans
-    who want to experience The World in virtual reality.
+  <p class="text-sm text-text-muted text-center leading-relaxed max-w-lg mx-auto mb-6">
+    A community for fans of the .hack&#47;&#47; series. We curate a database of .hack-themed
+    VRChat worlds and avatars, host community meetups and watch parties, and bring fans together to experience
+    「The World」 in virtual reality.
   </p>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6">
-    <Card>
-      <div class="text-accent mb-1.5">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M2 12h20"></path>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
-      </div>
-      <h3 class="text-sm font-semibold text-text mb-0.5">World Curation</h3>
-      <p class="text-xs text-text-dim leading-relaxed">Find and explore .hack VRChat worlds.</p>
-    </Card>
-
-    <Card>
-      <div class="text-text-muted mb-1.5">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-        </svg>
-      </div>
-      <h3 class="text-sm font-semibold text-text mb-0.5">Group Sessions</h3>
-      <p class="text-xs text-text-dim leading-relaxed">Regular meetups and explorations.</p>
-    </Card>
-
-    <Card>
-      <div class="text-text-muted mb-1.5">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </div>
-      <h3 class="text-sm font-semibold text-text mb-0.5">Avatar Showcase</h3>
-      <p class="text-xs text-text-dim leading-relaxed">.hack character avatars in VRChat.</p>
-    </Card>
-
-    <Card>
-      <div class="text-accent-dim mb-1.5">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-          <line x1="8" y1="21" x2="16" y2="21"></line>
-          <line x1="12" y1="17" x2="12" y2="21"></line>
-        </svg>
-      </div>
-      <h3 class="text-sm font-semibold text-text mb-0.5">Instance Tracker</h3>
-      <p class="text-xs text-text-dim leading-relaxed">ALGOS bot monitors active instances.</p>
-    </Card>
-  </div>
 
   <div class="flex items-center justify-center gap-3 pt-3 border-t border-panel-border">
     <a href="https://discord.gg/2PwUyaKbfR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white font-semibold text-sm hover:bg-accent-bright transition-all duration-300">
@@ -87,29 +37,223 @@ import Card from '../Card.astro';
 
 <!-- Sub-view: What is .hack? -->
 <div id="view-whatis" class="subview" style="display: none;">
-  <Card hover={false}>
-    <h3 class="font-display text-base font-semibold text-text mb-3 flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-accent"></span>
-      What is .hack?
-    </h3>
-    <div class="space-y-3 text-base text-text-muted leading-relaxed">
-      <p>
-        <strong class="text-text">.hack</strong> (pronounced "dot hack") is a multimedia franchise
-        created by CyberConnect2 and published by Bandai Namco. It spans anime series, manga, novels,
-        and video games — all set in or around a fictional MMORPG called <em class="text-accent">The World</em>.
-      </p>
-      <p>
-        The franchise explores themes of virtual reality, digital consciousness, and the blurring line
-        between online and offline identities — themes that resonate deeply with the VRChat community.
-      </p>
-      <p>
-        Major entries include <em class="text-text">.hack//Sign</em> (anime),
-        <em class="text-text">.hack//IMOQ</em> (PS2 games),
-        <em class="text-text">.hack//G.U.</em> (PS2/PS4/PC games),
-        and <em class="text-text">.hack//Roots</em> (anime).
-      </p>
+  <div class="space-y-4">
+    <p class="text-sm text-text-muted leading-relaxed text-center">
+      <strong class="text-text">.hack</strong> (pronounced "dot hack") is a multimedia franchise
+      depicting a virtual game called <em class="text-accent">「The World」</em> and the players
+      swept up in its mysteries. Debuting in 2002 with the anime .hack//Sign and the PS2 game
+      .hack//Infection, the series spans action RPGs, anime, novels, manga, and OVAs — pioneering
+      cross-media storytelling by weaving interconnected stories across different formats within the
+      same universe.
+    </p>
+
+    <!-- Interactive Timeline -->
+    <div class="timeline-container">
+      <div class="timeline-track" role="tablist">
+        <button class="timeline-node" role="tab" data-entry="sign">.hack//Sign</button>
+        <button class="timeline-node" role="tab" data-entry="imoq">.hack//IMOQ</button>
+        <button class="timeline-node" role="tab" data-entry="roots">.hack//Roots</button>
+        <button class="timeline-node" role="tab" data-entry="gu">.hack//G.U.</button>
+        <button class="timeline-node" role="tab" data-entry="link">.hack//Link</button>
+        <button class="timeline-node" role="tab" data-entry="quantum">.hack//Quantum</button>
+        <button class="timeline-node" role="tab" data-entry="movie">Beyond the World</button>
+      </div>
+
+      <!-- Expandable details -->
+      <div class="timeline-details">
+        <div class="timeline-detail" id="entry-sign" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/sign-1.webp" alt=".hack//Sign" class="gallery-active">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">Anime</span>
+              <span class="timeline-type-detail">2002 · 26 episodes</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                A player named Tsukasa awakens inside 「The World」 with no memory and discovers he cannot log out.
+                As others are drawn into the mystery surrounding him, they begin to uncover secrets hidden
+                within the game itself.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">AI Buster (novel) · Legend of the Twilight (manga/anime) · ZERO (novel) · Unison (OVA)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-detail" id="entry-imoq" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/imoq-1.webp" alt=".hack//Infection" class="gallery-active">
+              <img src="/images/timeline/imoq-2.webp" alt=".hack//Mutation">
+              <img src="/images/timeline/imoq-3.webp" alt=".hack//Outbreak">
+              <img src="/images/timeline/imoq-4.webp" alt=".hack//Quarantine">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">RPG</span>
+              <span class="timeline-type-detail">2002–2003 · 4 games (PS2)</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                When his friend falls into a coma after a strange encounter in 「The World」, a new player named
+                Kite obtains a mysterious power and sets out to uncover the truth - both inside and outside the
+                game. The four games (Infection, Mutation, Outbreak, Quarantine) tell one continuous story.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">Liminality (OVA) · Another Birth (novels) · XXXX (manga) · Epitaph of Twilight (light novel)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-detail" id="entry-roots" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/roots-1.webp" alt=".hack//Roots" class="gallery-active">
+              <img src="/images/timeline/roots-2.jpg" alt=".hack//Roots">
+              <img src="/images/timeline/roots-3.webp" alt=".hack//Roots">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">Anime</span>
+              <span class="timeline-type-detail">2006 · 26 episodes</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                A prelude to G.U., following a player named Haseo during his early days in the rebuilt version
+                of 「The World」. After losing everything to a mysterious player killer, he sets out on a path of
+                revenge that leads him deeper into the game's hidden conflicts.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">CELL (novel) · Returner (OVA) · Alcor (manga)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-detail" id="entry-gu" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/gu-1.webp" alt=".hack//G.U." class="gallery-active">
+              <img src="/images/timeline/gu-2.webp" alt=".hack//G.U.">
+              <img src="/images/timeline/gu-3.webp" alt=".hack//G.U.">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">RPG</span>
+              <span class="timeline-type-detail">2006–2007 · 3 games + Vol.4 (PS2 / PS4 / PC)</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                Haseo, now known as "The Terror of Death," hunts a powerful player killer called Tri-Edge who
+                is responsible for putting players into comas. Across three volumes, his quest for revenge
+                evolves into something much larger as he uncovers the truth behind 「The World」 R:2. 
+                Available today as .hack//G.U. Last Recode.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">G.U.+ (manga) · G.U. Novels · Trilogy (CGI film)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-detail" id="entry-link" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/link-1.jpg" alt=".hack//Link" class="gallery-active">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">RPG</span>
+              <span class="timeline-type-detail">2010 · PSP</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                High schooler Tokio Kuryuu is dragged into 「The World」 by a mysterious program and gains
+                the ability to travel through its history. Reliving key events across every era of the
+                franchise, he teams up with characters from Sign through G.U. to confront a threat that
+                spans the entire timeline of 「The World」.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">Twilight Knights (manga)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-detail" id="entry-quantum" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/quantum-1.jpg" alt=".hack//Quantum" class="gallery-active">
+              <img src="/images/timeline/quantum-2.jpg" alt=".hack//Quantum">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">OVA</span>
+              <span class="timeline-type-detail">2010–2011 · 3 episodes</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                Sakuya, Tobias, and Mary are three close friends playing the latest revision of
+                「The World」. When a routine adventure goes wrong and they stumble into a sealed area,
+                one of them is left comatose in the real world - pulling the others into a desperate
+                investigation that uncovers a new threat lurking within the game.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">Quantum+ (manga) · Quantum I (manga)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-detail" id="entry-movie" role="tabpanel">
+          <div class="timeline-detail-layout">
+            <div class="timeline-gallery" data-gallery>
+              <img src="/images/timeline/btw-1.webp" alt=".hack//Beyond the World" class="gallery-active">
+              <img src="/images/timeline/btw-2.jpg" alt=".hack//Beyond the World">
+              <img src="/images/timeline/btw-3.webp" alt=".hack//Beyond the World">
+              <div class="timeline-gallery-dots">
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+                <span class="timeline-gallery-dot"></span>
+              </div>
+            </div>
+            <div class="timeline-detail-content">
+              <span class="timeline-type">Film</span>
+              <span class="timeline-type-detail">2012</span>
+              <p class="text-sm text-text-muted leading-relaxed mt-2">
+                In 2024, a girl named Sora who has never played an online game joins the latest version of
+                「The World」. She quickly discovers something is deeply wrong; a mysterious phenomenon is causing
+                the game to bleed into reality, and she may be the only one who can stop it.
+              </p>
+              <div class="timeline-related">
+                <span class="timeline-related-label">Related media</span>
+                <span class="timeline-related-items">Versus (PS3 game)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </Card>
+  </div>
 </div>
 
 <!-- Sub-view: Official -->

@@ -99,6 +99,68 @@ const avatarSeries = [...new Set(avatars.map(a => a.data.series))].sort();
       });
     });
 
+    // ---- Timeline interaction ----
+    var timelineNodes = document.querySelectorAll('.timeline-node');
+    var timelineDetails = document.querySelectorAll('.timeline-detail');
+
+    timelineNodes.forEach(function (node) {
+      node.addEventListener('click', function () {
+        var entry = node.getAttribute('data-entry');
+        var target = document.getElementById('entry-' + entry);
+        var isActive = node.classList.contains('timeline-active');
+
+        // Deactivate all
+        timelineNodes.forEach(function (n) { n.classList.remove('timeline-active'); });
+        timelineDetails.forEach(function (d) { d.classList.remove('timeline-detail-active'); });
+
+        // Toggle: if it was already active, just close it
+        if (!isActive && target) {
+          node.classList.add('timeline-active');
+          target.classList.add('timeline-detail-active');
+        }
+      });
+    });
+
+    // ---- Gallery cycling ----
+    var galleries = document.querySelectorAll('[data-gallery]');
+    galleries.forEach(function (gallery) {
+      var images = gallery.querySelectorAll('img');
+      if (images.length < 2) return;
+
+      var dots = gallery.querySelectorAll('.timeline-gallery-dot');
+      var current = 0;
+      images[0].classList.add('gallery-active');
+      if (dots.length) dots[0].classList.add('gallery-dot-active');
+
+      setInterval(function () {
+        images[current].classList.remove('gallery-active');
+        if (dots.length) dots[current].classList.remove('gallery-dot-active');
+        current = (current + 1) % images.length;
+        images[current].classList.add('gallery-active');
+        if (dots.length) dots[current].classList.add('gallery-dot-active');
+      }, 4000);
+    });
+
+    // ---- Subtle tilt on main card ----
+    var tiltCard = document.querySelector('[data-card-role="main"]');
+    var tiltInner = tiltCard ? tiltCard.querySelector('.main-card-inner') : null;
+    var tiltMax = 2.5; // degrees
+    var tiltSmooth = null;
+
+    if (tiltCard && tiltInner && window.matchMedia('(pointer: fine)').matches) {
+      tiltCard.addEventListener('mousemove', function (e) {
+        if (tiltCard.classList.contains('main-collapsed')) return;
+        var rect = tiltCard.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5 to 0.5
+        var y = (e.clientY - rect.top) / rect.height - 0.5;
+        tiltInner.style.transform = 'perspective(800px) rotateY(' + (x * tiltMax) + 'deg) rotateX(' + (-y * tiltMax) + 'deg)';
+      });
+
+      tiltCard.addEventListener('mouseleave', function () {
+        tiltInner.style.transform = '';
+      });
+    }
+
     // ---- Card expansion: expanded card always goes to order:1 (left) ----
     var mainCard = document.querySelector('[data-card-role="main"]');
     var mainTitle = mainCard.querySelector('.main-card-titlebar h2');
